@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Lab1
 {
@@ -9,7 +10,10 @@ namespace Lab1
         private List<char> RusAlphabet = new List<char>();
         private List<char> EngAlphabet = new List<char>();
         private List<char> UkrAlphabet = new List<char>();
-
+        private void AddPunctuation(List<char> list)
+        {
+            list.AddRange(new char[] { ',', '.', '!', '?', (char)34, (char)39, ':', ';', '-', '(', ')', '№' });
+        }
         private void FillRusList()
         {
             for (char c = 'А'; c <= 'Я'; c++)
@@ -18,6 +22,7 @@ namespace Lab1
                 RusAlphabet.Add(c);
             RusAlphabet.Add('Ё');
             RusAlphabet.Add('ё');
+            AddPunctuation(RusAlphabet);
         }
 
         private void FillEngList()
@@ -26,6 +31,7 @@ namespace Lab1
                 EngAlphabet.Add(c);
             for (char c = 'a'; c <= 'z'; c++)
                 EngAlphabet.Add(c);
+            AddPunctuation(EngAlphabet);
         }
 
         private void FillUkrList()
@@ -42,6 +48,7 @@ namespace Lab1
             UkrAlphabet.Remove('ъ');
             UkrAlphabet.AddRange(new char[4]{ 'ї', 'ґ','є','і'});
             UkrAlphabet.AddRange(new char[4] { 'Ї', 'Ґ', 'Є', 'І' });
+            AddPunctuation(UkrAlphabet);
         }
         public void Initialize()
         {
@@ -61,10 +68,53 @@ namespace Lab1
     }
     class TextAnalyzer
     {
-
+        public Dictionary<char, int> char_count = new Dictionary<char, int>();
+        public Dictionary<char, double> char_frequency = new Dictionary<char, double>();
+        public void FillDictionary(string text)
+        {
+            foreach(char c in text)
+            {
+                if (char_count.ContainsKey(c))
+                    char_count[c]++;
+                else
+                    char_count.Add(c, 1);
+            }
+        }
+        
+        public void ConvertToFrequency(Dictionary<char, int> d,int text_size)
+        {
+            foreach(KeyValuePair<char,int> k_v in d)
+            {
+                char_frequency.Add(k_v.Key, (double)k_v.Value / text_size);
+            }
+        }
+        public void OutputSortedFrequency(Dictionary<char, double> d)
+        {
+            var sortedDict = from entry in d orderby entry.Value ascending select entry;
+            Console.WriteLine("Frequency list:");
+            foreach (KeyValuePair<char, double> k_v in sortedDict)
+                Console.WriteLine($"{k_v.Key}: {k_v.Value}");
+        }
     }
     class Program
     {
+        public string ReadString(string path)
+        {
+            return File.ReadAllText(path);
+        }
+        public bool CheckStringLength(string text)
+        {
+            if (text.Length > 1600)
+                return false;
+            else return true;
+        }
+        public string ShortenString(string text, int size)
+        {
+            if (text.Length > size)
+                return text.Substring(0, size);
+            else
+                return text;
+        }
         public void LaunchPythonScript(string url, string source_language)
         {
             System.Diagnostics.ProcessStartInfo start = new System.Diagnostics.ProcessStartInfo();
@@ -95,6 +145,17 @@ namespace Lab1
             TextGenerator gen = new TextGenerator();
             gen.Initialize();
             Console.WriteLine(gen.GenerateRusText(100));
+            //use substring to decrease char count in string
+            string text = p.ReadString("/Users/qwysam/repos/Information_Theory/Information-Theory/Lab1/rus.txt");
+            if (!p.CheckStringLength(text))
+            {
+                text = p.ShortenString(text, 1600);
+            }
+            Console.WriteLine(text);
+            TextAnalyzer textAnalyzer = new TextAnalyzer();
+            textAnalyzer.FillDictionary(text);
+            textAnalyzer.ConvertToFrequency(textAnalyzer.char_count, text.Length);
+            textAnalyzer.OutputSortedFrequency(textAnalyzer.char_frequency);
         }
     }
 }
