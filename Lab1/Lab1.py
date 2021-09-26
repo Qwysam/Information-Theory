@@ -4,7 +4,7 @@ import sys
 import mtranslate
 from mtranslate import translate
 class Translator:
-    def Translate(text,tolanguage,fromlanguage):
+    def Translate(self,text,tolanguage,fromlanguage):
         return translate(text, tolanguage,fromlanguage)
 class Parser:
     def Parse():
