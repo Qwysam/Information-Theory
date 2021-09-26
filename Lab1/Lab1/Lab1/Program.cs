@@ -74,10 +74,13 @@ namespace Lab1
         {
             foreach(char c in text)
             {
-                if (char_count.ContainsKey(c))
-                    char_count[c]++;
-                else
-                    char_count.Add(c, 1);
+                if (c != '\n')
+                {
+                    if (char_count.ContainsKey(c))
+                        char_count[c]++;
+                    else
+                        char_count.Add(c, 1);
+                }
             }
         }
         
@@ -94,6 +97,20 @@ namespace Lab1
             Console.WriteLine("Frequency list:");
             foreach (KeyValuePair<char, double> k_v in sortedDict)
                 Console.WriteLine($"{k_v.Key}: {k_v.Value}");
+        }
+        public int NumberOfPossibleMessages(int text_length,Dictionary<char,int> char_count)
+        {
+            return (int)Math.Pow(char_count.Count, text_length);
+        }
+        public double QuantityOfInformation(int text_length, Dictionary<char, double> char_frequency)
+        {
+            double res = -text_length;
+            double tmp = 0;
+            foreach(KeyValuePair<char,double> k_v in char_frequency)
+            {
+                tmp += k_v.Value * Math.Log2(k_v.Value);
+            }
+            return res * tmp;
         }
     }
     class Program
