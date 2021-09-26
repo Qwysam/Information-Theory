@@ -22,7 +22,26 @@ class Parser:
             res+=tag.text
             res+='\n'
         return res
-TranslatorObj = Translator()
-#print(TranslatorObj.Translate("Тестируем методы Питона","en",sys.argv[2]))
 parser = Parser()
-print(parser.FindData(parser.ReadHTML("https://masterimargo.ru/book-1.html")))
+str_ru = parser.FindData(parser.ReadHTML(sys.argv[1]))
+print("Parsing Complete")
+str_ru_size = len(str_ru)
+chars_to_remove = str_ru_size-3000
+if(str_ru_size>3000):
+    str_ru = str_ru[:str_ru_size-chars_to_remove]
+file_ru = open("/Users/qwysam/repos/Information_Theory/Information-Theory/Lab1/rus.txt","w")
+file_ru.write(str_ru)
+file_ru.close()
+print("rus.txt ready")
+str_ru_size = len(str_ru)
+TranslatorObj = Translator()
+str_en = TranslatorObj.Translate(str_ru,"en",sys.argv[2])
+file_en = open("/Users/qwysam/repos/Information_Theory/Information-Theory/Lab1/eng.txt","w")
+file_en.write(str_en)
+file_en.close()
+print("eng.txt ready")
+str_uk = TranslatorObj.Translate(str_ru,"uk",sys.argv[2])
+file_uk = open("/Users/qwysam/repos/Information_Theory/Information-Theory/Lab1/ukr.txt","w")
+file_uk.write(str_uk)
+file_uk.close()
+print("ukr.txt ready")
