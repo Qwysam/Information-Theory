@@ -50,11 +50,6 @@ namespace Lab1
             UkrAlphabet.AddRange(new char[4] { 'Ї', 'Ґ', 'Є', 'І' });
             AddPunctuation(UkrAlphabet);
         }
-        public void Initialize()
-        {
-            FillEngList();
-            FillUkrList();
-        }
 
         public string GenerateRusText(int size)
         {
@@ -63,6 +58,26 @@ namespace Lab1
             string res = "";
             for (int i = 0; i < size; i++)
                 res += RusAlphabet[r.Next(0, 65)];
+            return res;
+        }
+
+        public string GenerateEngText(int size)
+        {
+            FillEngList();
+            Random r = new Random();
+            string res = "";
+            for (int i = 0; i < size; i++)
+                res += EngAlphabet[r.Next(0, 65)];
+            return res;
+        }
+
+        public string GenerateUkrText(int size)
+        {
+            FillUkrList();
+            Random r = new Random();
+            string res = "";
+            for (int i = 0; i < size; i++)
+                res += UkrAlphabet[r.Next(0, 65)];
             return res;
         }
     }
@@ -110,7 +125,7 @@ namespace Lab1
             {
                 tmp += k_v.Value * Math.Log2(k_v.Value);
             }
-            return res * tmp;
+            return Math.Ceiling(res * tmp);
         }
     }
     class Program
@@ -160,7 +175,6 @@ namespace Lab1
             Program p = new Program();
             //p.LaunchPythonScript("https://masterimargo.ru/book-1.html", "ru");
             TextGenerator gen = new TextGenerator();
-            gen.Initialize();
             Console.WriteLine(gen.GenerateRusText(100));
             //use substring to decrease char count in string
             string text = p.ReadString("/Users/qwysam/repos/Information_Theory/Information-Theory/Lab1/rus.txt");
