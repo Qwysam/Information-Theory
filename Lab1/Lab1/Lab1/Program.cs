@@ -54,30 +54,33 @@ namespace Lab1
         public string GenerateRusText(int size)
         {
             FillRusList();
+            int alphabet_size = RusAlphabet.Count - 1;
             Random r = new Random();
             string res = "";
             for (int i = 0; i < size; i++)
-                res += RusAlphabet[r.Next(0, 65)];
+                res += RusAlphabet[r.Next(0, alphabet_size-1)];
             return res;
         }
 
         public string GenerateEngText(int size)
         {
             FillEngList();
+            int alphabet_size = EngAlphabet.Count - 1;
             Random r = new Random();
             string res = "";
             for (int i = 0; i < size; i++)
-                res += EngAlphabet[r.Next(0, 65)];
+                res += EngAlphabet[r.Next(0, alphabet_size)];
             return res;
         }
 
         public string GenerateUkrText(int size)
         {
             FillUkrList();
+            int alphabet_size = UkrAlphabet.Count - 1;
             Random r = new Random();
             string res = "";
             for (int i = 0; i < size; i++)
-                res += UkrAlphabet[r.Next(0, 65)];
+                res += UkrAlphabet[r.Next(0, alphabet_size)];
             return res;
         }
     }
