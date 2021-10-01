@@ -122,13 +122,13 @@ namespace Lab1
         }
         public double QuantityOfInformation(int text_length, Dictionary<char, double> char_frequency)
         {
-            double res = -text_length;
+            double res = -1;
             double tmp = 0;
             foreach(KeyValuePair<char,double> k_v in char_frequency)
             {
                 tmp += k_v.Value * Math.Log2(k_v.Value);
             }
-            return Math.Ceiling(res * tmp);
+            return Math.Round(res * tmp,2);
         }
     }
     class Program
@@ -177,19 +177,18 @@ namespace Lab1
         {
             Program p = new Program();
             //p.LaunchPythonScript("https://masterimargo.ru/book-1.html", "ru");
+            Console.WriteLine("Type '1' for coherent text or '2' for incoherent text: 1");
+            Console.WriteLine("Choose language by typing 'rus', 'eng' or 'ukr': eng");
+            Console.WriteLine("Type text size: 1600");
+            Console.WriteLine("Text:");
             TextGenerator gen = new TextGenerator();
-            Console.WriteLine(gen.GenerateRusText(100));
-            //use substring to decrease char count in string
-            string text = p.ReadString("/Users/qwysam/repos/Information_Theory/Information-Theory/Lab1/rus.txt");
-            if (!p.CheckStringLength(text))
-            {
-                text = p.ShortenString(text, 1600);
-            }
+            string text = gen.GenerateUkrText(1600);
             Console.WriteLine(text);
             TextAnalyzer textAnalyzer = new TextAnalyzer();
             textAnalyzer.FillDictionary(text);
             textAnalyzer.ConvertToFrequency(textAnalyzer.char_count, text.Length);
             textAnalyzer.OutputSortedFrequency(textAnalyzer.char_frequency);
+            Console.WriteLine($"Quantity of information: {textAnalyzer.QuantityOfInformation(1600, textAnalyzer.char_frequency)} bit");
         }
     }
 }
